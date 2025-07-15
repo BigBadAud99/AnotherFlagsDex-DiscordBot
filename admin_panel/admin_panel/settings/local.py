@@ -2,7 +2,6 @@ from .base import *
 
 DEBUG = True
 SECRET_KEY = "insecure"
-
 INSTALLED_APPS.append("achievement")
 
 # Only allow connections from local IPs
