@@ -3,6 +3,7 @@ from .base import *
 DEBUG = True
 SECRET_KEY = "insecure"
 INSTALLED_APPS.append("achievement")
+INSTALLED_APPS.append("craftings")
 
 # Only allow connections from local IPs
 ALLOWED_CIDR_NETS = [
