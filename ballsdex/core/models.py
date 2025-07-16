@@ -454,6 +454,9 @@ class Player(models.Model):
         description="How you want to handle trade accept cooldown",
         default=TradeCooldownPolicy.COOLDOWN,
     )
+    battles_won = fields.IntField(null=False, default=0)
+battles_drawn = fields.IntField(null=False, default=0)
+battles_lost = fields.IntField(null=False, default=0)
     extra_data = fields.JSONField(default=dict)
     balls: fields.BackwardFKRelation[BallInstance]
 
