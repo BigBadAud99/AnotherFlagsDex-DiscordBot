@@ -439,6 +439,9 @@ class Player(models.Model):
         description="How you want to handle privacy",
         default=PrivacyPolicy.DENY,
     )
+    battles_won = fields.IntField(null=False, default=0)
+battles_drawn = fields.IntField(null=False, default=0)
+battles_lost = fields.IntField(null=False, default=0)
     mention_policy = fields.IntEnumField(
         MentionPolicy,
         description="How you want to handle mentions",
