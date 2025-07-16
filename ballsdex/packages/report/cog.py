@@ -8,8 +8,8 @@ import time
 from datetime import datetime
 from ballsdex.settings import settings
 
-REPORT_CHANNEL_ID = 1369980696696848414
-REPORT_GUILD_ID = 1229732904238714902
+REPORT_CHANNEL_ID = 1392111719718850571
+REPORT_GUILD_ID = 1160130412522250240
 REPORT_JSON_PATH = os.path.join(os.path.dirname(__file__), "reports.json")
 
 REPORT_TYPES = [
