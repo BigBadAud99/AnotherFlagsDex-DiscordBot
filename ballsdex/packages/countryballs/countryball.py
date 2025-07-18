@@ -156,7 +156,6 @@ class BallSpawnView(View):
 
     async def on_timeout(self):
         self.catch_button.disabled = True
-        self.rar_btn.disabled = True
         if self.message:
             try:
                 await self.message.edit(view=self)
@@ -171,13 +170,6 @@ class BallSpawnView(View):
             await interaction.response.send_message("I was caught already!", ephemeral=True)
         else:
             await interaction.response.send_modal(CountryballNamePrompt(self))
-
-    @button(style=discord.ButtonStyle.success, label="Rarity")
-    async def rar_btn(self, interaction: discord.Interaction["BallsDexBot"], button: Button):
-        await interaction.response.send_message(
-            f"This Flag's rarity is: {self.model.rarity}",
-            ephemeral=True,
-        )
 
     @classmethod
     async def from_existing(cls, bot: "BallsDexBot", ball_instance: BallInstance):
