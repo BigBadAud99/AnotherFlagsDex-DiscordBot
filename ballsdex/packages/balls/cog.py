@@ -1040,5 +1040,5 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
         source.embed.set_thumbnail(url=interaction.user.display_avatar.url)
         
         pages = Pages(source=source, interaction=interaction)
-        await pages.start(ephemeral=True)
+        await pages.start(ephemeral=False)
         
