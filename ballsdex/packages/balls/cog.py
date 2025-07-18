@@ -18,6 +18,7 @@ from ballsdex.core.models import (
     Trade,
     TradeObject,
     balls,
+    Ball,
 )
 from ballsdex.core.utils.buttons import ConfirmChoiceView
 from ballsdex.core.utils.paginator import FieldPageSource, Pages
@@ -956,3 +957,120 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
             if emoji:
                 embed.set_thumbnail(url=emoji.url)
         await interaction.followup.send(embed=embed)
+
+    @app_commands.command()
+    @app_commands.checks.cooldown(1, 60, key=lambda i: i.user.id)
+    async def rarity(
+        self,
+        interaction: discord.Interaction,
+        reverse: bool = False,
+    ):
+        """
+        Show the rarity list of the bot
+
+        Parameters
+        ----------
+        reverse: bool
+            Whether to show the rarity list in reverse
+        """
+
+        # Filter enabled collectibles
+        enabled_collectibles = [x for x in balls.values() if x.enabled]
+
+        if not enabled_collectibles:
+            await interaction.response.send_message(
+                f"There are no collectibles registered in {settings.bot_name} yet.",
+                ephemeral=True,
+            )
+            return
+
+        # Group collectibles by rarity
+        rarity_to_collectibles = {}
+        for collectible in enabled_collectibles:
+            rarity = collectible.rarity
+            if rarity not in rarity_to_collectibles:
+                rarity_to_collectibles[rarity] = []
+            rarity_to_collectibles[rarity].append(collectible)
+
+        # Sort the rarity_to_collectibles dictionary by rarity
+        sorted_rarities = sorted(rarity_to_collectibles.keys(), reverse=reverse)
+
+        # Display collectibles grouped by rarity
+        entries = []
+        for rarity in sorted_rarities:
+            collectible_names = "\n".join(
+                [
+                    f"\u200b ⋄ {self.bot.get_emoji(c.emoji_id) or 'N/A'} {c.country}"
+                    for c in rarity_to_collectibles[rarity]
+                ]
+            )
+            entry = (f"∥ Rarity: {rarity}", f"{collectible_names}")
+            entries.append(entry)
+
+        # Starting the Pager
+        source = FieldPageSource(entries, per_page=7, inline=False, clear_description=False)
+        source.embed.title = f"{settings.bot_name} Rarity List"
+        source.embed.colour = discord.Colour.blurple()
+        pages = Pages(source=source, interaction=interaction, compact=False)
+        await pages.start()
+
+     @app_commands.command()
+    async def leaderboard(self, interaction: discord.Interaction):
+        """
+        Show the leaderboard of users with the most caught countryballs.
+        """
+        await interaction.response.defer(ephemeral=True, thinking=True)
+        
+        players = await Player.annotate(ball_count=Count("balls")).order_by("-ball_count").limit(10)
+        
+        if not players:
+            await interaction.followup.send("No players found.", ephemeral=True)
+            return
+
+        entries = []
+        for i, player in enumerate(players):
+            user = self.bot.get_user(player.discord_id)
+            if user is None:
+                user = await self.bot.fetch_user(player.discord_id)
+            # If you want, edit "Balls:" to your choice. Example: f"Rocks: {player.ball_count}"))
+            entries.append((f"{i + 1}. {user.name}", f"Userflas: {player.ball_count}"))
+
+        source = FieldPageSource(entries, per_page=5, inline=False)
+        source.embed.title = "Top 10 players"
+        source.embed.color = discord.Color.gold()
+        source.embed.set_thumbnail(url=interaction.user.display_avatar.url)
+        
+        pages = Pages(source=source, interaction=interaction)
+        await pages.start(ephemeral=True)
+
+     @app_commands.command()
+    @app_commands.checks.cooldown(1, 5, key=lambda i: i.user.id)
+    async def inspect(self, interaction: discord.Interaction, ball: BallEnabledTransform):
+        """
+        Display info from a countryball without having the countryball.
+
+        Parameters
+        ----------
+        ball: BallInstance
+            The countryball you want to inspect
+        """
+        emoji = (
+            self.bot.get_emoji(ball.emoji_id) or ""
+        )  # Get emoji or an empty string if not found
+        embed = discord.Embed(
+            title=f"{emoji} {ball.country} Information:",
+            description=(
+                f"**⋄ Short Name:** {ball.short_name}\n"
+                f"**⋄ Catch Names:** {''.join(ball.catch_names)}\n"
+                f"**⋄ Rarity:** {ball.rarity}\n"
+                f"**⋄ HP:** {ball.health}\n"
+                f"**⋄ ATK:** {ball.attack}\n"
+                f"**⋄ Capacity Name:** {ball.capacity_name}\n"
+                f"**⋄ Capacity Description:** {ball.capacity_description}\n"
+                f"**⋄ Credits:** {ball.credits}\n"
+            ),
+            color=discord.Colour.blurple()
+        )
+        await interaction.response.send_message(
+            embed=embed
+        )  # Send the ball information embed as a response
