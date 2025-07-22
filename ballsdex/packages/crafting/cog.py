@@ -178,4 +178,4 @@ class Craft(commands.GroupCog):
 async def update_crafting_display(interaction, user_id, is_new=False):
     from .crafting_utils import update_crafting_display as _update
     await _update(interaction, user_id, is_new)
-
+             
