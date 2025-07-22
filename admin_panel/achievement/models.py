@@ -37,10 +37,15 @@ class Achievement(models.Model):
         Ball,
         blank=True,
         help_text="rewards for achievements"
-    )
+    ) 
+    required_quantity = models.PositiveIntegerField(
+        default=1,
+        help_text="Number of each required combo (ball + special) needed"
+    ) 
     self_catch = models.BooleanField(
              help_text="weither this achievement need self_catched balls", default=False
-    )
+    ) 
+    
     class Meta:
         db_table = "achievements"
 
