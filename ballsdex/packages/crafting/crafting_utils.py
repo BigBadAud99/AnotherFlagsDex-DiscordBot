@@ -7,8 +7,7 @@ from .models import CraftingIngredient
 from .models import CraftingIngredientGroup                                            
 from .models import CraftingGroupOption
 
-from ballsdex.settings import settings
-from .transformers import CraftTransform                                               
+from ballsdex.settings import settings                                             
 from ballsdex.core.utils.transformers import BallEnabledTransform, BallTransform        
 from ballsdex.core.utils.transformers import SpecialEnabledTransform
 from ballsdex.settings import settings                  
@@ -157,4 +156,4 @@ async def update_crafting_display(interaction, user_id, is_new=False):
             session['message'] = new_message
         except Exception as e2:
             print(f"Error sending followup message: {e2}")
-
+              
