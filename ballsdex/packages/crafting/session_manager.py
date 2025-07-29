@@ -52,6 +52,7 @@ class CraftingSessionData:
     
     def is_valid(self) -> tuple[bool, str]:
         """Check if session is still valid"""
+        # Check age (expire after 30 minutes)
         if datetime.datetime.now() - self.created_at > datetime.timedelta(minutes=30):
             return False, "Session expired"
         
@@ -92,6 +93,7 @@ _session_storage: Dict[int, CraftingSessionData] = {}
 def create_session(user_id: int, player: Player, ingredient_instances: List[int], special=None) -> bool:
     """Create a new crafting session"""
     try:
+        # End existing session if any
         if user_id in _session_storage:
             _session_storage[user_id].log_access("SESSION_REPLACED", "Creating new session")
             _session_storage[user_id].print_debug_log()
@@ -115,6 +117,7 @@ def get_session(user_id: int) -> Optional[Dict[str, Optional[object]]]:
     
     session = _session_storage[user_id]
     
+    # Validate session
     is_valid, reason = session.is_valid()
     if not is_valid:
         session.log_access("SESSION_INVALID", f"Reason: {reason}")
