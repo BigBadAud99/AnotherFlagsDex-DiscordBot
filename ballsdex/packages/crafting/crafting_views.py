@@ -33,6 +33,17 @@ class CraftingView(discord.ui.View):
         self.bot = bot
         self.player = player
         self.session_data = session_data
+        self.authorized_user_id = player.discord_id  
+    
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        """Check if the user is authorized to interact with this view"""
+        if interaction.user.id != self.authorized_user_id:
+            await interaction.response.send_message(
+                "❌ Only the person who started this crafting session can use these buttons!",
+                ephemeral=True
+            )
+            return False
+        return True
     
     @discord.ui.button(label="🔨 Craft", style=discord.ButtonStyle.success)
     async def craft_button(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -105,7 +116,7 @@ class CraftingView(discord.ui.View):
                 emoji=emoji
             ))
         
-        select = RecipeSelect(options, possible_recipes, self)
+        select = RecipeSelect(options, possible_recipes, self, self.authorized_user_id)
         view = discord.ui.View()
         view.add_item(select)
         
@@ -250,10 +261,21 @@ class CraftingView(discord.ui.View):
                 del crafting_sessions[interaction.user.id]         
 
 class RecipeSelect(discord.ui.Select):
-    def __init__(self, options, recipes, parent_view):
+    def __init__(self, options, recipes, parent_view, authorized_user_id):
         super().__init__(placeholder="Choose which item to craft...", options=options)
         self.recipes = recipes
         self.parent_view = parent_view
+        self.authorized_user_id = authorized_user_id
+    
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        """Check if the user is authorized to interact with this select menu"""
+        if interaction.user.id != self.authorized_user_id:
+            await interaction.response.send_message(
+                "❌ Only the person who started this crafting session can use this menu!",
+                ephemeral=True
+            )
+            return False
+        return True
     
     async def callback(self, interaction):
         recipe_index = int(self.values[0])
