@@ -962,7 +962,7 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
         """
         Show the leaderboard of users with the most caught countryballs.
         """
-        await interaction.response.defer(ephemeral=True, thinking=True)
+        await interaction.response.defer(ephemeral=False, thinking=True)
         
         players = await Player.annotate(ball_count=Count("balls")).order_by("-ball_count").limit(10)
         
