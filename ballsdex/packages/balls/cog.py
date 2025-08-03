@@ -19,6 +19,10 @@ from ballsdex.core.models import (
     TradeObject,
     balls,
 )
+from ballsdex.packages.balls.cardgenerator import CardGenerator
+import io
+from ballsdex.core.utils.transformers import BallTransform
+ballsdex.core.utils.transformers import SpecialTransform
 from ballsdex.core.utils.buttons import ConfirmChoiceView
 from ballsdex.core.utils.paginator import FieldPageSource, Pages
 from ballsdex.core.utils.sorting import FilteringChoices, SortingChoices, filter_balls, sort_balls
@@ -1041,3 +1045,28 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
         source.embed.colour = discord.Colour.blurple()
         pages = Pages(source=source, interaction=interaction, compact=False)
         await pages.start()
+
+@app_commands.describe(countryball="The countryball to view card of")
+    @app_commands.describe(special="Apply a special to the card.")
+    @app_commands.checks.has_any_role(*settings.root_role_ids)
+    async def viewcard(
+        self,
+        interaction: discord.Interaction["BallsDexBot"],
+        countryball: BallTransform,
+        special: SpecialTransform | None = None
+    ):
+        generator = CardGenerator(countryball, special)
+        generator.special = special
+        image, _ = generator.generate_image()
+
+        buffer = io.BytesIO()
+        image.save(buffer, format="PNG")
+        buffer.seek(0)
+
+    # Send it as a Discord file
+        discord_file = discord.File(fp=buffer, filename="card.png")
+        try:
+            await interaction.response.send_message(file=discord_file, ephemeral=True)
+        except Exception as e:
+            log.error("Something went wrong.", exc_info=e)
+            await interaction.response.send_message("Something went wrong.", ephemeral=True)
