@@ -1046,9 +1046,10 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
         pages = Pages(source=source, interaction=interaction, compact=False)
         await pages.start()
 
-@app_commands.describe(countryball="The countryball to view card of")
+@app_commands.command(name="viewcard", description="View a card of an existing countryball.")
+    @app_commands.describe(countryball="The countryball to view card of")
     @app_commands.describe(special="Apply a special to the card.")
-    @app_commands.checks.has_any_role(*settings.root_role_ids)
+    # @app_commands.checks.has_any_role(*settings.root_role_ids)
     async def viewcard(
         self,
         interaction: discord.Interaction["BallsDexBot"],
