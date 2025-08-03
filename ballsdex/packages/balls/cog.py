@@ -22,7 +22,7 @@ from ballsdex.core.models import (
 from ballsdex.packages.balls.cardgenerator import CardGenerator
 import io
 from ballsdex.core.utils.transformers import BallTransform
-ballsdex.core.utils.transformers import SpecialTransform
+from ballsdex.core.utils.transformers import SpecialTransform
 from ballsdex.core.utils.buttons import ConfirmChoiceView
 from ballsdex.core.utils.paginator import FieldPageSource, Pages
 from ballsdex.core.utils.sorting import FilteringChoices, SortingChoices, filter_balls, sort_balls
