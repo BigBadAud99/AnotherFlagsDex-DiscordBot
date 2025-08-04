@@ -1119,8 +1119,8 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
             instance = await BallInstance.create(
                 ball=ball,
                 player=player,
-                attack_bonus=random.randint(settings.min_attack_bonus, settings.max_attack_bonus),
-                health_bonus=random.randint(settings.min_health_bonus, settings.max_health_bonus),
+                attack_bonus=random.randint(settings.max_attack_bonus, settings.max_attack_bonus),
+                health_bonus=random.randint(settings.max_health_bonus, settings.max_health_bonus),
             )
             
             self.daily_claims[user_id] = now
