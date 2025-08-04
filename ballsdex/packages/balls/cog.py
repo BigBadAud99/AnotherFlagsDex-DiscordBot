@@ -34,7 +34,6 @@ from ballsdex.core.utils.transformers import (
     TradeCommandType,
 )
 from ballsdex.core.utils.utils import inventory_privacy, is_staff
-from ballsdex.packages.countryballs.countryball import BallSpawnView
 from ballsdex.packages.balls.countryballs_paginator import CountryballsViewer, DuplicateViewMenu
 from ballsdex.settings import settings
 
