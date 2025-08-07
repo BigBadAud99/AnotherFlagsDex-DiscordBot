@@ -42,7 +42,7 @@ if TYPE_CHECKING:
     from ballsdex.core.bot import BallsDexBot
 
 log = logging.getLogger("ballsdex.packages.countryballs")
-TIMEZONE_SETTING = timezone(timedelta(hours=24)) # Timezone configuration - change this to adjust timezone
+TIMEZONE_SETTING = timezone(timedelta(hours=6)) # Timezone configuration - change this to adjust timezone
 
 
 class DonationRequest(View):
