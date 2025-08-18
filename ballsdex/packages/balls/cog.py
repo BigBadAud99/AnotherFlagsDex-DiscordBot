@@ -1145,3 +1145,41 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
                 "An error occurred while distributing the reward. Please try again later!",
                 ephemeral=True
                 )
+
+    @app_commands.command()
+    @app_commands.checks.cooldown(1, 10800, key=lambda i: i.user.id)
+    async def clean(self, interaction: discord.Interaction, countryball: BallInstanceTransform):
+        """
+        Clean flags to increase it's stats!
+        """
+        UserID = str(interaction.user.id)
+        cb_txt = countryball.description(short=True, include_emoji=True, bot=self.bot)
+
+        picker = random.randint(1,101)
+
+        if picker >= 50:
+
+            increase = random.randint(1, 50)
+            
+            countryball.health_bonus += increase
+            await countryball.save()
+            
+            await interaction.response.send_message(
+                f"<@{UserID}> cleaned **{cb_txt}** for a few minutes, HP increased by +{increase}%!",
+                ephemeral = False
+            )
+
+        else:
+
+            increase = random.randint(1, 50)
+            
+            countryball.attack_bonus += increase
+            await countryball.save()
+
+            await interaction.response.send_message(
+                f"<@{UserID}> cleaned **{cb_txt}** for a few minutes, ATK increased by +1
+                {increase}%!",
+                ephemeral = False
+            )
+        
+        return
