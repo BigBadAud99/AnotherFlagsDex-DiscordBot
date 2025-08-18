@@ -1177,7 +1177,7 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
             await countryball.save()
 
             await interaction.response.send_message(
-                f"<@{UserID}> cleaned **{cb_txt}** for a few minutes, ATK increased by +1
+                f"<@{UserID}> cleaned **{cb_txt}** for a few minutes, ATK increased by +
                 {increase}%!",
                 ephemeral = False
             )
