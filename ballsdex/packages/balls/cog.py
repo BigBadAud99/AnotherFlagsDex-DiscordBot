@@ -1156,7 +1156,7 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
         cb_txt = countryball.description(short=True, include_emoji=True, bot=self.bot)
 
         picker = random.randint(1,101)
-        increase = random.randint(1, 50)
+        increase = random.randint(1, 15)
 
         if picker >= 50:
             
