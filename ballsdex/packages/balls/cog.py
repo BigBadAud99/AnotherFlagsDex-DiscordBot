@@ -1156,10 +1156,9 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
         cb_txt = countryball.description(short=True, include_emoji=True, bot=self.bot)
 
         picker = random.randint(1,101)
+        increase = random.randint(1, 50)
 
         if picker >= 50:
-
-            increase = random.randint(1, 50)
             
             countryball.health_bonus += increase
             await countryball.save()
@@ -1170,15 +1169,12 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
             )
 
         else:
-
-            increase = random.randint(1, 50)
             
             countryball.attack_bonus += increase
             await countryball.save()
 
             await interaction.response.send_message(
-                f"<@{UserID}> cleaned **{cb_txt}** for a few minutes, ATK increased by +
-                {increase}%!",
+                f"<@{UserID}> cleaned **{cb_txt}** for a few minutes, ATK increased by +{increase}%!",
                 ephemeral = False
             )
         
