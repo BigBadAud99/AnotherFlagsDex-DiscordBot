@@ -1147,7 +1147,7 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
                 )
 
     @app_commands.command()
-    @app_commands.checks.cooldown(1, 10800, key=lambda i: i.user.id)
+    @app_commands.checks.cooldown(1, 25200, key=lambda i: i.user.id)
     async def clean(self, interaction: discord.Interaction, countryball: BallInstanceTransform):
         """
         Clean flags to increase it's stats!
@@ -1156,7 +1156,7 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
         cb_txt = countryball.description(short=True, include_emoji=True, bot=self.bot)
 
         picker = random.randint(1,101)
-        increase = random.randint(1, 15)
+        increase = random.randint(1, 10)
 
         if picker >= 50:
             
@@ -1164,7 +1164,7 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
             await countryball.save()
             
             await interaction.response.send_message(
-                f"<@{UserID}> cleaned **{cb_txt}** for a few minutes, HP increased by +{increase}%!",
+                f"<@{UserID}> cleaned **{cb_txt}**, HP increased by +{increase}%!",
                 ephemeral = False
             )
 
@@ -1174,7 +1174,7 @@ class Balls(commands.GroupCog, group_name=settings.players_group_cog_name):
             await countryball.save()
 
             await interaction.response.send_message(
-                f"<@{UserID}> cleaned **{cb_txt}** for a few minutes, ATK increased by +{increase}%!",
+                f"<@{UserID}> cleaned **{cb_txt}**, ATK increased by +{increase}%!",
                 ephemeral = False
             )
         
